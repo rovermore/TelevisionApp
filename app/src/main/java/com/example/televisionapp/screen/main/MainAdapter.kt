@@ -1,4 +1,4 @@
-package com.example.televisionapp.screen
+package com.example.televisionapp.screen.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +11,15 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_item.view.*
 
 class MainAdapter (
-    var movieList: MutableList<Movie>?
-) : RecyclerView.Adapter<MainAdapter.MyViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainAdapter.MyViewHolder {
+    var movieList: MutableList<Movie>?,
+    var itemClicked: OnItemClicked
+    ) : RecyclerView.Adapter<MainAdapter.MyViewHolder>() {
+
+    interface OnItemClicked {
+        fun itemClicked(movie: Movie)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
 
         return MyViewHolder(view)
@@ -26,7 +32,7 @@ class MainAdapter (
         return movieList!!.size
     }
 
-    override fun onBindViewHolder(holder: MainAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         if(!movieList.isNullOrEmpty()) {
             holder.bindView(movieList!![position])
         }
@@ -45,12 +51,23 @@ class MainAdapter (
         }
     }
 
-    inner class MyViewHolder(private val view: View) : RecyclerView.ViewHolder(view)  {
+    inner class MyViewHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener   {
+
+        init{
+            view.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            val currentMovie = movieList?.get(position)
+            itemClicked.itemClicked(currentMovie!!)
+        }
+
         fun bindView(movie: Movie) {
             view.apply {
                 Picasso.with(context)
                     .load(BASE_URL.plus(movie.attachments?.find { it.name.contains("COVER") }?.value))
-                    .into(movieImageView);
+                    .into(movieImageView)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.televisionapp.screen
+package com.example.televisionapp.screen.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

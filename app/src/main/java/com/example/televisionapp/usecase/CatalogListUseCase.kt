@@ -8,6 +8,6 @@ class CatalogListUseCase
     @Inject constructor(private val repository: ApiRepository): UseCase {
 
     override suspend fun request(): CatalogResponse{
-        return repository.getTransactionsResponse()
+        return repository.getCatalogResponse()
     }
 }
