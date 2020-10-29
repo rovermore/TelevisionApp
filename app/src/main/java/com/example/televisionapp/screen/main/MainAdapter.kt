@@ -58,9 +58,7 @@ class MainAdapter (
         }
 
         override fun onClick(v: View?) {
-            val position = adapterPosition
-            val currentMovie = movieList?.get(position)
-            itemClicked.itemClicked(currentMovie!!)
+            movieList?.get(adapterPosition)?.let { itemClicked.itemClicked(it) }
         }
 
         fun bindView(movie: Movie) {
